@@ -3,6 +3,7 @@
 .idea*
 
 build/
+.gradle/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
