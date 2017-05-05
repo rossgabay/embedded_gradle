@@ -1,38 +1,55 @@
 
 package com.rgabay.embedded_gradle;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Person {
 
-	@GraphId private Long id;
+    private Person() {
+        // Empty constructor required as of Neo4j API 2.0.5
+    };
 
+    public Person(String name) {
+        this.name = name;
+    }
+
+	@GraphId
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    @Property
 	private String name;
 
-	private Person() {
-		// Empty constructor required as of Neo4j API 2.0.5
-	};
+    @Relationship(type="favorite_pet", direction = Relationship.OUTGOING)
+    private Pet favorite_pet;
 
-	public Person(String name) {
-		this.name = name;
-	}
+    void setFavorite_pet(Pet favorite_pet) {
+        this.favorite_pet = favorite_pet;
+    }
 
-	/**
-	 * Neo4j doesn't REALLY have bi-directional relationships. It just means when querying
-	 * to ignore the direction of the relationship.
-	 * https://dzone.com/articles/modelling-data-neo4j
-	 */
+
+    @Relationship(type="has_pet", direction = Relationship.OUTGOING)
+    Set<Pet> pets;
+
+    void hasPet(Pet pet) {
+        if (pets == null) {
+            pets = new HashSet<>();
+        }
+        pets.add(pet);
+    }
+
 	@Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
-	public Set<Person> teammates;
+    Set<Person> teammates;
 
 	public void worksWith(Person person) {
 		if (teammates == null) {

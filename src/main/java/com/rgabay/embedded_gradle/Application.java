@@ -16,9 +16,12 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
 @EnableNeo4jRepositories
+@EnableTransactionManagement
 public class Application {
 
 	private final static Logger log = LoggerFactory.getLogger(Application.class);
@@ -28,45 +31,32 @@ public class Application {
 	}
 
 	@Bean
+    @Transactional
 	CommandLineRunner demo(PersonRepository personRepository) {
 		return args -> {
 
-			personRepository.deleteAll();
-
 			Person greg = new Person("Greg");
-			Person roy = new Person("Roy");
-			Person craig = new Person("Craig");
-
-			List<Person> team = Arrays.asList(greg, roy, craig);
-
-			log.info("Before linking up with Neo4j...");
-
-			team.stream().forEach(person -> log.info("\t" + person.toString()));
 
 			personRepository.save(greg);
-			personRepository.save(roy);
-			personRepository.save(craig);
 
-			greg = personRepository.findByName(greg.getName());
-			greg.worksWith(roy);
-			greg.worksWith(craig);
-			personRepository.save(greg);
+			Person gregz = personRepository.findByName(greg.getName());
+            log.info("Sanity check, greg's name is: {}", gregz.getName());
 
-			roy = personRepository.findByName(roy.getName());
-			roy.worksWith(craig);
-			// We already know that roy works with greg
-			personRepository.save(roy);
+            gregz.hasPet(new Pet("Garfield"));
+            gregz.hasPet(new Pet("Tom"));
+            gregz.setFavorite_pet(new Pet("Bonnie"));
 
-			// We already know craig works with roy and greg
+            personRepository.save(gregz);
 
-			log.info("Lookup each person by name...");
-			team.stream().forEach(person -> log.info(
-					"\t" + personRepository.findByName(person.getName()).toString()));
+            gregz = personRepository.findOne(greg.getId(), -1);
+            gregz.pets.forEach(p-> log.info("Greg's has a pet - {}", p.getName()));
+
 		};
 	}
 
-	// embedded driver config example, to make the db non-permanent, remove .setURI call
-    @Bean
+    // embedded driver config example, to make the db non-permanent, remove .setURI call
+    /*
+	@Bean
     public Configuration configuration() {
         Configuration config = new Configuration();
         config
@@ -74,10 +64,10 @@ public class Application {
                 .setDriverClassName("org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver")
                 .setURI("file:///var/tmp/graph.db");
         return config;
-    }
+    }*/
 
 	// HTTP driver config example
-	/*
+
 	@Bean
 	public Configuration configuration() {
 		Configuration config = new Configuration();
@@ -86,7 +76,7 @@ public class Application {
 				.setDriverClassName("org.neo4j.ogm.drivers.http.driver.HttpDriver")
 				.setURI("http://localhost:7474");
 		return config;
-	}*/
+	}
 
 	@Bean
 	public SessionFactory sessionFactory() {
