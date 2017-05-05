@@ -2,6 +2,7 @@
 package com.rgabay.embedded_gradle;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,9 +16,12 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.SessionFactory;
+import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.neo4j.ogm.model.Result;
 
 @SpringBootApplication
 @EnableNeo4jRepositories
@@ -32,25 +36,17 @@ public class Application {
 
 	@Bean
     @Transactional
-	CommandLineRunner demo(PersonRepository personRepository) {
+	CommandLineRunner demo(PersonRepository personRepository, Neo4jTemplate template) {
 		return args -> {
 
 			Person greg = new Person("Greg");
+            greg.setArbitraryLongs(Arrays.asList(new Long(1), new Long(2)));
 
 			personRepository.save(greg);
 
-			Person gregz = personRepository.findByName(greg.getName());
-            log.info("Sanity check, greg's name is: {}", gregz.getName());
+            Result r = template.query("match (n) return n", Collections.EMPTY_MAP);
 
-            gregz.hasPet(new Pet("Garfield"));
-            gregz.hasPet(new Pet("Tom"));
-            gregz.setFavorite_pet(new Pet("Bonnie"));
-
-            personRepository.save(gregz);
-
-            gregz = personRepository.findOne(greg.getId(), -1);
-            gregz.pets.forEach(p-> log.info("Greg's has a pet - {}", p.getName()));
-
+            r.forEach(System.out::println);
 		};
 	}
 
@@ -88,4 +84,8 @@ public class Application {
         return new Neo4jTransactionManager(sessionFactory);
     }
 
+    @Bean
+    public Neo4jTemplate neo4jTemplate(SessionFactory sessionFactory) {
+        return new Neo4jTemplate(sessionFactory);
+    }
 }

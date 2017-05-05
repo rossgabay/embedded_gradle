@@ -58,12 +58,21 @@ public class Person {
 		teammates.add(person);
 	}
 
-	public String toString() {
+	@Property
+	List<Long> arbitraryLongs;
 
-		return this.name + "'s teammates => "
-				+ Optional.ofNullable(this.teammates).orElse(
-						Collections.emptySet()).stream().map(
-								person -> person.getName()).collect(Collectors.toList());
+    public List<Long> getArbitraryLongs() {
+        return arbitraryLongs;
+    }
+
+    public void setArbitraryLongs(List<Long> arbitraryLongs) {
+        this.arbitraryLongs = arbitraryLongs;
+    }
+
+    public String toString() {
+
+		return this.name + "'s arbitraryLong values:  => "
+				+ Optional.ofNullable(this.arbitraryLongs).orElse(new ArrayList<Long>());
 	}
 
 	public String getName() {
