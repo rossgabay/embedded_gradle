@@ -44,8 +44,7 @@ public class Application {
 
 			personRepository.save(greg);
 
-            Result r = template.query("match (n) return n", Collections.EMPTY_MAP);
-
+            Result r = template.query("match (n:Person) return n", Collections.EMPTY_MAP);
             r.forEach(System.out::println);
 		};
 	}
