@@ -41,11 +41,13 @@ public class Application {
 
 			Person greg = new Person("Greg");
             greg.setArbitraryLongs(Arrays.asList(new Long(1), new Long(2)));
+            greg.setRoles(Arrays.asList(RoleType.ARCHITECT, RoleType.DEVELOPER));
 
 			personRepository.save(greg);
 
             Result r = template.query("match (n:Person) return n", Collections.EMPTY_MAP);
             r.forEach(System.out::println);
+
 		};
 	}
 

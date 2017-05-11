@@ -69,10 +69,23 @@ public class Person {
         this.arbitraryLongs = arbitraryLongs;
     }
 
+    @Property
+    List<RoleType> roles;
+
+    public List<RoleType> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleType> roles) {
+        this.roles = roles;
+    }
+
     public String toString() {
 
 		return this.name + "'s arbitraryLong values:  => "
-				+ Optional.ofNullable(this.arbitraryLongs).orElse(new ArrayList<Long>());
+				+ Optional.ofNullable(this.arbitraryLongs).orElse(new ArrayList<Long>())
+                + "... RoleType values: =>"
+                + Optional.ofNullable(this.roles).orElse(new ArrayList<RoleType>()) ;
 	}
 
 	public String getName() {
