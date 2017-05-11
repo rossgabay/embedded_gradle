@@ -55,20 +55,20 @@ public class Application {
 	}
 
     // embedded driver config example, to make the db non-permanent, remove .setURI call
-    /*
+
 	@Bean
     public Configuration configuration() {
         Configuration config = new Configuration();
         config
                 .driverConfiguration()
-                .setDriverClassName("org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver")
-                .setURI("file:///var/tmp/graph.db");
+                .setDriverClassName("org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver");
+                //.setURI("file:///var/tmp/graph.db");
         return config;
-    }*/
+    }
 
 	// HTTP driver config example
 
-	@Bean
+	/*@Bean
 	public Configuration configuration() {
 		Configuration config = new Configuration();
 		config
@@ -76,7 +76,7 @@ public class Application {
 				.setDriverClassName("org.neo4j.ogm.drivers.http.driver.HttpDriver")
 				.setURI("http://localhost:7474");
 		return config;
-	}
+	}*/
 
 	@Bean
 	public SessionFactory sessionFactory() {

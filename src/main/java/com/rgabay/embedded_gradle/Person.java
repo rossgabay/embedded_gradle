@@ -41,11 +41,20 @@ public class Person {
     @Relationship(type="has_pet", direction = Relationship.OUTGOING)
     Set<Pet> pets;
 
+    public Set<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
+    }
+
     void hasPet(Pet pet) {
         if (pets == null) {
             pets = new HashSet<>();
         }
         pets.add(pet);
+
     }
 
 	@Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
