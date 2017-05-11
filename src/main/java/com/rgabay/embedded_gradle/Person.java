@@ -84,7 +84,7 @@ public class Person {
 
 		return this.name + "'s arbitraryLong values:  => "
 				+ Optional.ofNullable(this.arbitraryLongs).orElse(new ArrayList<Long>())
-                + "... RoleType values: =>"
+                + "... roles values: =>"
                 + Optional.ofNullable(this.roles).orElse(new ArrayList<RoleType>()) ;
 	}
 
