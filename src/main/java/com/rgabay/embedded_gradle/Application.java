@@ -3,6 +3,7 @@ package com.rgabay.embedded_gradle;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -41,7 +42,8 @@ public class Application {
 
 			Person greg = new Person("Greg");
             greg.setArbitraryLongs(Arrays.asList(new Long(1), new Long(2)));
-            greg.setRoles(Arrays.asList(RoleType.ARCHITECT, RoleType.DEVELOPER));
+           // greg.setRoles(Arrays.asList(RoleType.ARCHITECT, RoleType.DEVELOPER));
+            greg.setRoles(Arrays.asList(RoleType.DEVELOPER, RoleType.DEVELOPER));
 
 			personRepository.save(greg);
 

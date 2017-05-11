@@ -85,7 +85,9 @@ public class Person {
 		return this.name + "'s arbitraryLong values:  => "
 				+ Optional.ofNullable(this.arbitraryLongs).orElse(new ArrayList<Long>())
                 + "... roles values: =>"
-                + Optional.ofNullable(this.roles).orElse(new ArrayList<RoleType>()) ;
+                + Optional.ofNullable(this.roles).orElse(new ArrayList<RoleType>())
+                + "... String value ([0] element only) =>"
+                + Optional.ofNullable(this.roles.get(0).getValue()).orElse("") ;
 	}
 
 	public String getName() {
