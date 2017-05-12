@@ -42,13 +42,14 @@ public class Application {
 
 			Person greg = new Person("Greg");
             greg.setArbitraryLongs(Arrays.asList(new Long(1), new Long(2)));
-           // greg.setRoles(Arrays.asList(RoleType.ARCHITECT, RoleType.DEVELOPER));
-            greg.setRoles(Arrays.asList(RoleType.DEVELOPER, RoleType.DEVELOPER));
+            greg.setRoles(Arrays.asList(RoleType.ARCHITECT, RoleType.DEVELOPER));
+
 
 			personRepository.save(greg);
 
-          //  Result r = template.query("match (n:Person) return n", Collections.EMPTY_MAP);
-          //  r.forEach(System.out::println);
+			//  THIS BLOWS UP WITH EMBEDDED
+            //  Result r = template.query("match (n:Person) return n", Collections.EMPTY_MAP);
+            //  r.forEach(System.out::println);
 
             personRepository.getPlist().forEach(System.out::println);
 
@@ -62,8 +63,8 @@ public class Application {
         Configuration config = new Configuration();
         config
                 .driverConfiguration()
-                .setDriverClassName("org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver")
-                .setURI("file:///var/tmp/graph.db");
+                .setDriverClassName("org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver");
+                //.setURI("file:///var/tmp/graph.db");
         return config;
     }
 
