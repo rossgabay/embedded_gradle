@@ -45,6 +45,7 @@ public class Person {
         return pets;
     }
 
+    @Relationship(type="has_pet", direction = Relationship.OUTGOING)
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
